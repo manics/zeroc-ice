@@ -81,7 +81,8 @@ endif
 
 libdir			= $(top_srcdir)/python
 install_pythondir	= $(prefix)/python
-install_libdir		= $(prefix)/python
+install_pylibdir	= $(prefix)/python
+install_libdir		= $(install_pylibdir)
 
 #
 # Platform specific definitions

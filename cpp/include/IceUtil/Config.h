@@ -16,28 +16,53 @@
 // Most CPUs support only one endianness, with the notable exceptions
 // of Itanium (IA64) and MIPS.
 //
+
 #ifdef __GLIBC__
 # include <endian.h>
 #endif
 
-#if defined(__i386)     || defined(_M_IX86) || defined(__x86_64)  || \
-    defined(_M_X64)     || defined(_M_IA64) || defined(__alpha__) || \
-    defined(__MIPSEL__) || (defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN))
+#if defined(HAVE_ENDIAN_H)
+#   include <endian.h>
+#   if __BYTE_ORDER==__LITTLE_ENDIAN
+#      define ICE_LITTLE_ENDIAN
+#   elif __BYTE_ORDER==__BIG_ENDIAN
+#      define ICE_BIG_ENDIAN
+#   else
+#      error "Unknown endian type"
+#   endif
+#endif
+
+#if !defined(ICE_LITTLE_ENDIAN) && !defined(ICE_BIG_ENDIAN)
+#if defined(__i386)     || defined(_M_IX86) || defined(__x86_64)  ||   \
+  defined(_M_X64)     || defined(_M_IA64) || defined(__alpha__) ||     \
+  defined(__MIPSEL__) || (defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN))
 #   define ICE_LITTLE_ENDIAN
 #elif defined(__sparc) || defined(__sparc__) || defined(__hppa)      || \
-      defined(__ppc__) || defined(__powerpc) || defined(_ARCH_COM) || \
-      defined(__MIPSEB__) || (defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN))
+  defined(__ppc__) || defined(__powerpc) || defined(_ARCH_COM) ||	\
+  defined(__MIPSEB__) || (defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN))
 #   define ICE_BIG_ENDIAN
 #else
 #   error "Unknown architecture"
+#endif
 #endif
 
 //
 // 32 or 64 bit mode?
 //
+#if defined(HAVE_LIMITS_H)
+#   include <stdint.h>
+#   include <limits.h>
+#   if __WORDSIZE == 64
+#      define ICE_64
+#   else
+#      define ICE_32
+#   endif
+#endif
+
+#if !defined(ICE_32) && !defined(ICE_64)
 #if defined(__linux) && defined(__sparc__)
 //
-// We are a linux sparc, which forces 32 bit usr land, no matter 
+// We are a linux sparc, which forces 32 bit usr land, no matter
 // the architecture
 //
 #   define  ICE_32
@@ -51,9 +76,10 @@
 #else
 #   define ICE_32
 #endif
+#endif
 
 //
-// Compiler extensions to export and import symbols: see the documentation 
+// Compiler extensions to export and import symbols: see the documentation
 // for Visual C++, Sun ONE Studio 8 and HP aC++.
 //
 // TODO: more macros to support IBM Visual Age _Export syntax as well.
@@ -132,7 +158,7 @@
 //     non dll-interface class ... used as base for dll-interface class ...
 #      pragma warning( disable : 4275 )
 //      ...: decorated name length exceeded, name was truncated
-#      pragma warning( disable : 4503 )  
+#      pragma warning( disable : 4503 )
 #   endif
 
     //
@@ -179,7 +205,7 @@ class noncopyable
 protected:
 
     noncopyable() { }
-    ~noncopyable() { } // May not be virtual! Classes without virtual 
+    ~noncopyable() { } // May not be virtual! Classes without virtual
                        // operations also derive from noncopyable.
 
 private:
@@ -233,7 +259,7 @@ class DummyBCC
 {
 public:
 
-    ~DummyBCC() 
+    ~DummyBCC()
     {
     }
 };

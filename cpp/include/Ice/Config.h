@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstddef>
 
 #if defined(_WIN32)
 #   include <process.h>

@@ -29,7 +29,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.jgoodies.looks.Options;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import com.jgoodies.forms.factories.Borders;
 
 import IceGrid.*;

@@ -12,7 +12,7 @@
     public static void main(java.lang.String[]);
 }
 
-# Following options are useful for debugging. 
+# Following options are useful for debugging.
 # -printseeds
 # -verbose
 
@@ -48,7 +48,7 @@
     java.lang.Object readResolve();
 }
 
-# Your application may contain more items that need to be preserved; 
+# Your application may contain more items that need to be preserved;
 # typically classes that are dynamically created using Class.forName:
 
 -keep public class Ice.** {
@@ -63,7 +63,6 @@
 -keep interface IceGrid.**
 -keep class com.jgoodies.looks.plastic.PlasticXPLookAndFeel
 -keep class com.jgoodies.looks.plastic.PlasticFieldCaret
--keep class com.jgoodies.looks.windows.WindowsFieldCaret 
 -keep public class javax.**
 -keep interface javax.**
 -keep class * implements javax.**

@@ -111,7 +111,7 @@ IceUtil::Time::now(Clock clock)
 #  endif
             return Time(static_cast<Int64>(tb.time) * ICE_INT64(1000000) + tb.millitm * 1000);
         }
-#elif defined(__hpux) || defined(__APPLE__)
+#elif defined(__hppa) || defined(__FreeBSD_kernel__) || defined(__APPLE__)
         //
         // HP/MacOS does not support CLOCK_MONOTONIC
         //

@@ -11,7 +11,7 @@ top_srcdir	= .
 
 include $(top_srcdir)/config/Make.rules
 
-SUBDIRS		= config src include test demo
+SUBDIRS		= config src include
 
 INSTALL_SUBDIRS	= $(install_bindir) $(install_libdir) $(install_includedir) $(install_configdir)
 

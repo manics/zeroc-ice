@@ -11,7 +11,7 @@ top_srcdir	= .
 
 include $(top_srcdir)/config/Make.rules.cs
 
-SUBDIRS		= src test demo
+SUBDIRS		= src
 
 install:: install-common
 	@if test ! -d $(install_bindir) ; \

@@ -73,7 +73,8 @@ DSEP = /
 
 bindir = $(top_srcdir)/bin
 
-install_bindir		= $(prefix)/bin
+install_clibindir	= $(prefix)/bin
+install_bindir		= $(install_clibindir)
 
 install_libdir		= $(prefix)/lib
 
@@ -176,7 +177,7 @@ endif
 ifneq ($(POLICY_TARGET),)
 
 $(bindir)/$(POLICY_TARGET):
-	@echo -e " \
+	@printf " \
 <configuration> \n \
   <runtime> \n \
     <assemblyBinding xmlns=\"urn:schemas-microsoft-com:asm.v1\"> \n \

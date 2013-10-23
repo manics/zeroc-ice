@@ -1487,14 +1487,16 @@ Freeze::MapHelperI::size() const
 
     try
     {
-#if DB_VERSION_MAJOR != 4
-#error Freeze requires DB 4.x
+       
+#if DB_VERSION_MAJOR < 4
+#error Freeze requires DB 4.x or greater
 #endif
-#if DB_VERSION_MINOR < 3
+#if DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR < 3
         _db->stat(&s, 0);
 #else
         _db->stat(_connection->dbTxn(), &s, 0);
 #endif
+       
     }
     catch(const ::DbException& dx)
     {
