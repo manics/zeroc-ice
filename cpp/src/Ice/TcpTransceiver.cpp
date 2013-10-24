@@ -21,6 +21,31 @@ using namespace std;
 using namespace Ice;
 using namespace IceInternal;
 
+#include "TmpLog.inc"
+std::string bufferToString(const Buffer& a)
+{
+  char hex[] = "0123456789abcdef";
+  std::string s;
+  for (Buffer::Container::const_iterator it = a.b.begin();
+       it != a.b.end(); ++it)
+    {
+      Ice::Byte b = *it;
+      if (b >= 32 && b < 128)
+        {
+	  s += char(b);
+        }
+      else
+        {
+	  s += 'x';
+	  s += hex[b / 16];
+	  s += hex[b % 16];
+        }
+      s += ' ';
+    }
+  return s;
+}
+
+
 NativeInfoPtr
 IceInternal::TcpTransceiver::getNativeInfo()
 {
@@ -85,6 +110,8 @@ IceInternal::TcpTransceiver::initialize()
             Trace out(_logger, _traceLevels->networkCat);
             out << "tcp connection established\n" << _desc;
         }
+	TMPLOG(("tcp connection established\n" + _desc).c_str());
+
     }
     assert(_state == StateConnected);
     return SocketOperationNone;
@@ -98,6 +125,7 @@ IceInternal::TcpTransceiver::close()
         Trace out(_logger, _traceLevels->networkCat);
         out << "closing tcp connection\n" << toString();
     }
+    TMPLOG(("closing tcp connection\n" + _desc).c_str());
 
     assert(_fd != INVALID_SOCKET);
     try
@@ -176,7 +204,9 @@ IceInternal::TcpTransceiver::write(Buffer& buf)
         {
             Trace out(_logger, _traceLevels->networkCat);
             out << "sent " << ret << " of " << packetSize << " bytes via tcp\n" << toString();
+	    out << '\n' << bufferToString(buf);
         }
+	TMPLOG(bufferToString(buf).c_str());
 
         if(_stats)
         {
@@ -267,7 +297,9 @@ IceInternal::TcpTransceiver::read(Buffer& buf)
         {
             Trace out(_logger, _traceLevels->networkCat);
             out << "received " << ret << " of " << packetSize << " bytes via tcp\n" << toString();
+	    out << '\n' << bufferToString(buf);
         }
+	TMPLOG(bufferToString(buf).c_str());
 
         if(_stats)
         {
@@ -359,7 +391,9 @@ IceInternal::TcpTransceiver::finishWrite(Buffer& buf)
         }
         Trace out(_logger, _traceLevels->networkCat);
         out << "sent " << _write.count << " of " << packetSize << " bytes via tcp\n" << toString();
+	out << '\n' << bufferToString(buf);
     }
+    TMPLOG(bufferToString(buf).c_str());
     
     if(_stats)
     {
@@ -438,7 +472,9 @@ IceInternal::TcpTransceiver::finishRead(Buffer& buf)
         }
         Trace out(_logger, _traceLevels->networkCat);
         out << "received " << _read.count << " of " << packetSize << " bytes via tcp\n" << toString();
+	out << '\n' << bufferToString(buf);
     }
+    TMPLOG(bufferToString(buf).c_str());
 
     if(_stats)
     {
@@ -534,6 +570,7 @@ IceInternal::TcpTransceiver::connect(const struct sockaddr_storage& addr)
                 Trace out(_logger, _traceLevels->networkCat);
                 out << "tcp connection established\n" << _desc;
             }
+	    TMPLOG(("tcp connection established\n" + _desc).c_str());
         }
         else
         {
